@@ -50,8 +50,8 @@ for (i in 1:length(split_snippets_list)) {
   }
   appending_vector_tf.idf <- integer(length(idf))
   for (k in 1:length(idf)) {
-    #appending_vector_tf.idf[k] <- appending_vector[k]*idf[k]
-    appending_vector_tf.idf[k] <- idf[k]*((appending_vector[k]*(k1+1))/(appending_vector[k]+(k1*(1-b+b*(length(split_snippets_list[[i]])/avgdl)))))
+    #appending_vector_tf.idf[k] <- appending_vector[k]*idf[k] # Without Okapi
+    appending_vector_tf.idf[k] <- idf[k]*((appending_vector[k]*(k1+1))/(appending_vector[k]+(k1*(1-b+b*(length(split_snippets_list[[i]])/avgdl))))) # With Okapi
   }
   mapping_vector_matrix <- cbind(mapping_vector_matrix, appending_vector)
   mapping_vector_matrix_tf.idf <- cbind(mapping_vector_matrix_tf.idf, appending_vector_tf.idf)
