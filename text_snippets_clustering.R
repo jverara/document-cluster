@@ -30,10 +30,18 @@ for  (i in 1:length(snippet_dictionary)) {
 names(idf) = snippet_dictionary
 
 # Create matrix of vectors
+total_lengths <-c()
+for (i in 1:length(split_snippets_list)) {
+  total_lengths <- c(total_lengths, length(split_snippets_list[[i]]))
+}
+avgdl <- mean(total_lengths) #avgdl = average documents' length
+
 mapping_vector_matrix <- matrix(NA, nrow = length(snippet_dictionary), ncol = 0)
 rownames(mapping_vector_matrix) = snippet_dictionary
 mapping_vector_matrix_tf.idf <- matrix(NA, nrow = length(snippet_dictionary), ncol = 0)
 rownames(mapping_vector_matrix_tf.idf) = snippet_dictionary
+k1 = 1.5 # k1 in [1.2,2.0]
+b = 0.75
 for (i in 1:length(split_snippets_list)) {
   appending_vector <- integer(length(snippet_dictionary))
   for (j in 1:length(split_snippets_list[[i]])) {
@@ -43,7 +51,7 @@ for (i in 1:length(split_snippets_list)) {
   appending_vector_tf.idf <- integer(length(idf))
   for (k in 1:length(idf)) {
     #appending_vector_tf.idf[k] <- appending_vector[k]*idf[k]
-    appending_vector_tf.idf[k] <- idf[k]*((appending_vector[k]*(k1+1))/appending_vector[k]+k1*(1-b+b*(length(split_snippets_list[[i]])/))
+    appending_vector_tf.idf[k] <- idf[k]*((appending_vector[k]*(k1+1))/(appending_vector[k]+(k1*(1-b+b*(length(split_snippets_list[[i]])/avgdl)))))
   }
   mapping_vector_matrix <- cbind(mapping_vector_matrix, appending_vector)
   mapping_vector_matrix_tf.idf <- cbind(mapping_vector_matrix_tf.idf, appending_vector_tf.idf)
@@ -128,7 +136,7 @@ cutree(dendrogram_tf.idf_cos.sim, h=0.95)
 
 #clusters <- cutree(dendrogram.cos, h = 0.5)
 #clusters_tf.idf <- cutree(dendrogram.cos_tf.idf, h = 0.95)
-clusters_tf.idf_cos.sim <- cutree(dendrogram_tf.idf_cos.sim, h=0.95)
+clusters_tf.idf_cos.sim <- cutree(dendrogram_tf.idf_cos.sim, h=0.90)
 
 # Substite numbered documents by document itself
 clusters_variable <- clusters_tf.idf_cos.sim
