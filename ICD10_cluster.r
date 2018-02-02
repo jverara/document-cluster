@@ -315,6 +315,18 @@ calcTFIDF2 <- function(MAT){
   return(tfidf)
 }
 
+calcOkapi <- function(MAT, k1, b) {
+  
+  tf  <- MAT
+  idf <- log(nrow(MAT)/colSUms(MAT))
+  k1 <- 1.5
+  b <- 0.75
+  OkapiBM <- idf*((tf*(k1+1))/(tf+(k1*(1-b+b*(length(rowSums(tf))/mean(rowSums(tf)))))))
+  
+  return(OkapiBM)
+  
+}
+
 EvalClust <- function(L,TL){
 ################################  
 # L  is vector of cluster as returned from hclust 
